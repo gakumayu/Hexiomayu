@@ -1,0 +1,42 @@
+<template>
+  <g>
+<polygon :points="points" fill="gray"></polygon>
+<cell v-for="p in coords" :a="p.a" :b="p.b" n="6" exp="50"></cell>
+</g>
+</template>
+
+<script>
+import cell from '~/components/slot.vue'
+export default{
+    props: ['level','exp'],
+    data(){
+	return {
+	    coords:[],
+	    }
+    },
+    mounted(){
+	let L=3;
+	for(let a=-L;a<=L;a++){
+	    for(let b=-L;b<=L;b++){
+		if(a+b>=-L && a+b<=L){
+		    this.coords.push({a:a,b:b});
+		}
+	    }
+	}    
+    },
+    computed:{
+	points(){
+	    let pts=""
+	    for(let i=0;i<6;i++){
+		pts +=" "+(400+Math.cos(Math.PI/6+Math.PI/3*i)*(2*this.level+2)*this.exp)+","+
+		    (400+Math.sin(Math.PI/6+Math.PI/3*i)*(2*this.level+2)*this.exp)//連結
+		
+	    }
+	    return pts;
+	}
+    },
+    components: {
+      cell
+  }
+}
+</script>
