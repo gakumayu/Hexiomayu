@@ -1,7 +1,8 @@
 <template>
-<g :transform="translate" @mousedown="mouseDown($event)"
+<g @mousedown="mouseDown($event)"
+   @mousemove="mouseMove($event)"
    @mouseup="mouseUp($event)"
-   @mousemove="mouseMove($event)">
+   :transform="translate">
   <polygon :points="points" fill="yellow" stroke="yellow" stroke-width="10" fill-opacity="0.8"></polygon>
   <text :x="-exp/4" :y="exp/4" :font-size="exp" stroke="white" fill="white">{{n}}</text>
 </g>
@@ -9,7 +10,7 @@
 
 <script>
 export default{
-    props:['a','b','n','exp',],
+    props:['a','b','n','exp','index'],//templateのなかで呼び出すときに使う変数
     data(){
 	return {
 	    x:0, 
@@ -30,36 +31,25 @@ export default{
 	mouseUp(e){
 	    this.isMouseDown = false;//マウスの押し下げが終わった
 	    console.log(e.offsetX + "," + e.offsetY);
+	    let a=Math.round((-1/Math.sqrt(3)*this.x+this.y)/(2*this.exp));
+	    let b=Math.round((2/Math.sqrt(3)*this.x)/(2*this.exp));
+	    let aarray=[a,b];
+	    console.log(aarray);
+	    this.x=0;
+	    this.y=0;
+	    this.$emit('puton',{a:a, b:b, index:this.index});
 	},
 	mouseMove(e){
 	    if(this.isMouseDown){
-		this.x = e.offsetX - this.prevX;//e.offsetは動いた後の場所
-		this.y = e.offsetY - this.prevY;
+		let deltaX = e.offsetX - this.prevX;//e.offsetは動いた後の場所
+		let deltaY = e.offsetY - this.prevY;
+		this.x += deltaX;
+		this.y += deltaY;
 		this.prevX = e.offsetX;
 		this.prevY = e.offsetY;
 		console.log(e.offsetX + "," + e.offsetY);
 	    }
-	}
-	//	start(e){
-//	    this.isMouseDown = true;
-//	    console.log("drag started");
-//	    console.log([e.offsetX,e.offsetY]);
-//	    this.prevX = e.offsetX;//動く前
-// 	    this.prevY = e.offsetY;   
-//	},
-//	move(e){
-//	    if(this.isMouseDown){//マウスが押し下げている時だけ動く
-//		let deltaX = e.offsetX - this.prevX;//e.offsetは動いた後の場所
-//		let deltaY = e.offsetY - this.prevY;
-//		this.x += deltaX;
-//		this.y += deltaY;
-//		this.prevX = e.offsetX;
-//		this.prevY = e.offsetY;
-//	    }
-//	},
-//	finish(e){//始末
-//	    this.isMouseDown = false;//マウスの押し下げが終わった
-//	},
+	},
     },
     computed:{
 	points(){

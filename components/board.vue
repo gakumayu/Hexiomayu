@@ -2,7 +2,7 @@
 <g>
 <polygon :points="points" fill="gray"></polygon>
 <cell v-for="p in coords" :a="p.a" :b="p.b" exp="50"></cell>
-<piece v-for="p in conf" :a="p.a" :b="p.b" :n="p.n" exp="50"></piece>
+<piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i" exp="50" @puton="puton"></piece>
 </g>
 </template>
 
@@ -26,6 +26,14 @@ export default{
 		}
 	    }
 	}    
+    },
+    methods:{
+	puton(e){
+	    console.log("puton"+e.a+","+e.b+","+e.index);
+	    this.conf.splice(e.index,1,{a:e.a, b:e.b, n:this.conf[e.index].n})
+					
+	    //console.log(e);
+	}
     },
     computed:{
 	points(){
