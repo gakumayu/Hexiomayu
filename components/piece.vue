@@ -3,14 +3,14 @@
    @mousemove="mouseMove($event)"
    @mouseup="mouseUp($event)"
    :transform="translate">
-  <polygon :points="points" fill="yellow" stroke="yellow" stroke-width="10" fill-opacity="0.8"></polygon>
+  <polygon :points="points" :fill="color()" :stroke="color()" stroke-width="10" fill-opacity="0.8"></polygon>
   <text :x="-exp/4" :y="exp/4" :font-size="exp" stroke="white" fill="white">{{n}}</text>
 </g>
 </template>
 
 <script>
 export default{
-    props:['a','b','n','exp','index'],//templateのなかで呼び出すときに使う変数
+    props:['a','b','n','exp','index','r'],//templateのなかで呼び出すときに使う変数
     data(){
 	return {
 	    x:0, 
@@ -21,6 +21,19 @@ export default{
 	}
     },
     methods:{
+	color(){
+	    console.log("color")
+	    console.log(this.r[this.index]);
+	    if(1*this.r[this.index] > 1*this.n){
+		return "red";
+	    }
+	    if(1*this.r[this.index] == 1*this.n){
+		return "yellow";
+	    }
+	    if(1*this.r[this.index] < 1*this.n){
+		return "green";
+	    }
+	},
 	mouseDown(e){
 	    this.isMouseDown = true;
 	    console.log("drag started");
@@ -50,6 +63,11 @@ export default{
 		console.log(e.offsetX + "," + e.offsetY);
 	    }
 	},
+    },
+    mounted(){
+	console.log("color",this.index)
+	console.log(this.r);
+	
     },
     computed:{
 	points(){

@@ -1,6 +1,6 @@
 <template>
 <svg width="800" height="800">
-  <board level="3" exp="50"></board>
+    <board level="2" exp="50"></board>
 </svg>
 
 </template>

@@ -114,4 +114,10 @@ export default {
     }
   }
 }
-</script>
+  </script>
+<style scoped>
+  .v-application{
+  background-color: #FFE0AA;
+  }
+</style>
+

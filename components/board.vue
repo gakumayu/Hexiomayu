@@ -2,7 +2,8 @@
 <g>
 <polygon :points="points" fill="gray"></polygon>
 <cell v-for="p in coords" :a="p.a" :b="p.b" exp="50"></cell>
-<piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i" exp="50" @puton="puton"></piece>
+<piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i"
+       :r="neighbors()" exp="50" @puton="puton"></piece>
 </g>
 </template>
 
@@ -14,8 +15,20 @@ export default{
     data(){
 	return {
 	    coords:[],
-	    conf:[{a:0,b:0,n:3},{a:2,b:1,n:1}],
-	    }
+	    conf:[{a:0,b:1,n:2},
+		  {a:1,b:0,n:2},//
+		  {a:-1,b:1,n:2},//
+		  {a:1,b:-1,n:2},
+		  {a:-1,b:0,n:2},
+		  {a:0,b:-1,n:2},
+		  {a:-2,b:0,n:2},
+		  {a:-2,b:2,n:2},
+		  {a:0,b:2,n:2},//
+		  {a:2,b:0,n:2},
+		  {a:2,b:-2,n:2},
+		  {a:0,b:-2,n:2},
+		 ],
+	}
     },
     mounted(){
 	let L=this.level;
@@ -25,13 +38,52 @@ export default{
 		    this.coords.push({a:a,b:b});
 		}
 	    }
-	}    
+	}
+    },
+    computed:{
     },
     methods:{
+	neighbors(){
+	    let isNeighbor=function(x,y){
+		if(x.a-y.a==1 && x.b-y.b==0){
+		    return true;
+		}
+		if(x.a-y.a==-1 && x.b-y.b==0){
+		    return true;
+		}
+		if(x.a-y.a==0 && x.b-y.b==1){
+		    return true;
+		}
+		if(x.a-y.a==0 && x.b-y.b==-1){
+		    return true;
+		}
+		if(x.a-y.a==1 && x.b-y.b==-1){
+		    return true;
+		}
+		if(x.a-y.a==-1 && x.b-y.b==1){
+		    return true;
+		}
+		return false;
+	    }
+	    let numNeighbor=[];
+	    for(let p of this.conf){
+		let num = 0;
+		
+		for(let q of this.conf){
+		    if(isNeighbor(p,q)){
+			num++;
+		    }
+		}
+		numNeighbor.push(num)
+	    }
+	    //console.log(numNeighbor);
+	    return numNeighbor;
+	    
+	},
 	puton(e){
-	    console.log("puton"+e.a+","+e.b+","+e.index);
-	    this.conf.splice(e.index,1,{a:e.a, b:e.b, n:this.conf[e.index].n})
-					
+	    console.log("puton"+" "+e.a+","+e.b+","+e.index);
+	    this.conf.splice(e.index,1,{a:this.conf[e.index].a+e.a, b:this.conf[e.index].b+e.b, n:this.conf[e.index].n})
+	    //splice(追加・削除する位置,削除する要素数,追加する要素),削除された要素が配列型式で返される			
 	    //console.log(e);
 	}
     },
