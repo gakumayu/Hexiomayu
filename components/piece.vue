@@ -22,8 +22,8 @@ export default{
     },
     methods:{
 	color(){
-	    console.log("color")
-	    console.log(this.r[this.index]);
+	    //console.log("color")
+	    //console.log(this.r[this.index]);
 	    if(1*this.r[this.index] > 1*this.n){
 		return "red";
 	    }
@@ -36,10 +36,10 @@ export default{
 	},
 	mouseDown(e){
 	    this.isMouseDown = true;
-	    console.log("drag started");
+	    //console.log("drag started");
 	    this.prevX = e.offsetX;//動く前
 	    this.prevY = e.offsetY; 
-	    console.log(e.offsetX + "," + e.offsetY);
+	    //console.log(e.offsetX + "," + e.offsetY);
 	},
 	mouseUp(e){
 	    this.isMouseDown = false;//マウスの押し下げが終わった
@@ -47,7 +47,7 @@ export default{
 	    let a=Math.round((-1/Math.sqrt(3)*this.x+this.y)/(2*this.exp));
 	    let b=Math.round((2/Math.sqrt(3)*this.x)/(2*this.exp));
 	    let aarray=[a,b];
-	    console.log(aarray);
+	    //console.log(aarray);
 	    this.x=0;
 	    this.y=0;
 	    this.$emit('puton',{a:a, b:b, index:this.index});
@@ -60,13 +60,13 @@ export default{
 		this.y += deltaY;
 		this.prevX = e.offsetX;
 		this.prevY = e.offsetY;
-		console.log(e.offsetX + "," + e.offsetY);
+		//console.log(e.offsetX + "," + e.offsetY);
 	    }
 	},
     },
     mounted(){
-	console.log("color",this.index)
-	console.log(this.r);
+	//console.log("color",this.index)
+	//console.log(this.r);
 	
     },
     computed:{

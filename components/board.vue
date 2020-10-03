@@ -4,6 +4,7 @@
 <cell v-for="p in coords()" :a="p.a" :b="p.b" exp="50"></cell>
 <piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i"
        :r="neighbors()" exp="50" @puton="puton"></piece>
+<text x="100" y="100" v-if="complete()" stroke="red">success</text>
 </g>
 </template>
 
@@ -14,13 +15,19 @@ export default{
     props: ['level','exp','problem'],
     data(){
 	return {
+	    cleaed:false,
 	    conf:null
 	}
     },
     mounted(){//初期化の時だけ
 	this.conf=this.problem
-	console.log("Mounted")
+	//console.log("Mounted")
 	console.log(this.problem)
+    },
+    watch:{
+	level(){
+	    this.conf=this.problem
+	}
     },
     computed:{//算出プロパティ
     },
@@ -61,6 +68,9 @@ export default{
 		return false;
 	    }
 	    let numNeighbor=[];
+	    if(this.conf==null){
+		return null
+	    }
 	    for(let p of this.conf){
 		let num = 0;
 		
@@ -72,14 +82,28 @@ export default{
 		numNeighbor.push(num)
 	    }
 	    //console.log(numNeighbor);
-	    return numNeighbor;
-	    
+	    return numNeighbor;    
+	},
+	complete(){
+	    if(this.neighbors()==null){
+		return false
+	    }
+	    for(let i in this.neighbors()){
+		if(this.neighbors()[i] != this.conf[i].n){
+		    console.log(this.conf[i])
+		    return false
+		}
+	    }
+	    return true
 	},
 	puton(e){
 	    //console.log("puton"+" "+e.a+","+e.b+","+e.index);
 	    this.conf.splice(e.index,1,{a:this.conf[e.index].a+e.a, b:this.conf[e.index].b+e.b, n:this.conf[e.index].n})
 	    //splice(追加・削除する位置,削除する要素数,追加する要素),削除された要素が配列型式で返される			
 	    //console.log(e);
+	    if(this.complete()){
+		console.log("seccess")
+	    }
 	}
     },
     computed:{
