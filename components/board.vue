@@ -4,7 +4,7 @@
 <cell v-for="p in coords()" :a="p.a" :b="p.b" exp="50"></cell>
 <piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i"
        :r="neighbors()" exp="50" @puton="puton"></piece>
-<text x="100" y="100" v-if="complete()" stroke="red">success</text>
+<text x="250" y="400" v-if="complete()" stroke="white" fill="red" font-size="40">YOU ARE GENIUS</text>
 </g>
 </template>
 
