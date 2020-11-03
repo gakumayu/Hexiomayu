@@ -4,20 +4,23 @@
   <v-btn @click="minus()">-</v-btn>
   {{level}}
   <v-btn @click="plus()">+</v-btn>
-  <svg width="800" height="800">
-    <board :level="level" exp="50" :problem="problemset[level][1]"></board>
+  <svg width="2000" height="2000">
+    <startbutton v-if="!started" @start="started=true"></startbutton>
+    <board v-if="started" exp="50" :problem="problemset[game.level][game.index]" :nextLevelUp="nextLevelUp"></board>
   </svg>
 </div>
 
 </template>
 
 <script>
-
+import iconbase from '~/components/IconBase.vue'
 import board from '~/components/board.vue'
+import startbutton from '~/components/startbutton.vue'
+import {mapState} from 'vuex'
 export default {
     data(){
 	return{
-	    level:2,
+	    started:false,
 	    problemset:[
 		[
 		    [
@@ -171,16 +174,30 @@ export default {
 	    
 	}
     },
+    computed:{
+    	...mapState({
+	    level:'level',
+	    game:'game'
+	}),
+	nextLevelUp(){
+	    if(this.problemset[this.game.level].length > this.game.index + 1){
+		return false
+	    }else{
+		return true
+	    }
+	}
+    },
     components: {
-	board
+	board,
+	startbutton
     },
     methods:{
 	minus(){
-	    this.level--;
+	    this.$store.commit('levelDown')
 	},
 	plus(){
-	    this.level++;
-	}
+	   this.$store.commit('levelUp')
+	},
     }
 }
 </script>

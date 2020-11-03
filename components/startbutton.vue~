@@ -1,0 +1,28 @@
+<template>
+<g transform="translate(500,100)" @click="start" @mouseover="hovered" @mouseleave="leaved"style="cursor:pointer;">
+  <ellipse rx="250" ry="100"  fill="#DBC6EB" stroke="ABC2E8" stroke-width="10"></ellipse>
+  <text x="-150" y="20" fill="#1F3C88" stroke="#1F3C88" :font-size="fontsize">GAME START</text>
+</g>
+</template>
+
+<script>
+export default{
+    data(){
+	return{
+	    fontsize:50
+	}
+    },
+    methods:{
+	start(){
+	    this.$emit('start')
+	},
+	hovered(){
+	    this.fontsize=100
+	    console.log("hoverd")
+	},
+	leaved(){
+	    this.fontsize=50
+	}
+    }
+}
+</script>

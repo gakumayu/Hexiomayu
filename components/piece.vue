@@ -4,7 +4,7 @@
    @mouseup="mouseUp($event)"
    :transform="translate">
   <polygon :points="points" :fill="color()" :stroke="color()" stroke-width="10" fill-opacity="0.8"></polygon>
-  <text :x="-exp/4" :y="exp/4" :font-size="exp" stroke="white" fill="white">{{n}}</text>
+  <text :x="-exp/4" :y="exp/4" :font-size="exp" stroke="pink" fill="#FF348E">{{n}}</text>
 </g>
 </template>
 
@@ -78,7 +78,7 @@ export default{
 	    return pts
 	},
 	translate(){
-	    return "translate(" + (2*this.b*Math.sqrt(3)/2*this.exp+400+this.x) + "," + (2*(this.a*this.exp + this.b*0.5*this.exp)+400+this.y) + ")"
+	    return "translate(" + (2*this.b*Math.sqrt(3)/2*this.exp+400+this.x) + "," + (2*(this.a*this.exp + this.b*0.5*this.exp)+500+this.y) + ")"
 	},
     }
 }

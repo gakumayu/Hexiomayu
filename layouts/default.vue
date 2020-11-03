@@ -26,6 +26,8 @@
     </v-navigation-drawer>
     <v-app-bar
       :clipped-left="clipped"
+      color="teal"
+      dark
       fixed
       app
     >
@@ -50,6 +52,9 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <span v-if="$store.state.user">{{$store.state.user.email}}</span>
+      <v-btn v-if="!$store.state.user" @click="login()"> login to start </v-btn>
+      <v-btn v-if="$store.state.user" @click="logout()"> quit & logout</v-btn>
       <v-btn
         icon
         @click.stop="rightDrawer = !rightDrawer"
@@ -58,7 +63,7 @@
       </v-btn>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container v-if="$store.state.user">
         <nuxt />
       </v-container>
     </v-main>
@@ -112,9 +117,31 @@ export default {
       rightDrawer: false,
       title: 'Hexiomayu'
     }
-  }
+  },
+    computed:{
+	level(){
+	    return this.$store.state.level
+	},
+	user(){
+	    return this.$store.state.user
+	}
+    },
+    methods:{
+	login(){
+	    console.log("login")
+	    this.$store.dispatch('login')
+	},
+	logout(){
+	    this.$store.dispatch('saveMyLevel',
+				 {email:this.user.email,level:this.level}
+				)
+	    if(confirm("終わりますか？")){
+		this.$store.dispatch('logout')
+	    }
+	}
+    }
 }
-  </script>
+</script>
 <style scoped>
   .v-application{
   background-color: #FFE0AA;

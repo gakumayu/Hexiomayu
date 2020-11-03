@@ -1,18 +1,22 @@
 <template>
 <g>
-<polygon :points="points" fill="gray"></polygon>
-<cell v-for="p in coords()" :a="p.a" :b="p.b" exp="50"></cell>
-<piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i"
+  <polygon :points="points" fill="gray"></polygon>
+  <cell v-for="p in coords()" :a="p.a" :b="p.b" exp="50"></cell>
+  <piece v-for="(p,i) in conf" :a="p.a" :b="p.b" :n="p.n" :index="i"
        :r="neighbors()" exp="50" @puton="puton"></piece>
-<text x="250" y="400" v-if="complete()" stroke="white" fill="red" font-size="40">YOU ARE GENIUS</text>
+  <text x="180" y="350" v-if="complete()" stroke="silver" fill="#A6F6F1" font-size="60">YOU ARE GENIUS</text>
+  <nextlevelbutton v-if="complete()" :nextLevelUp="nextLevelUp"></nextlevelbutton>
+  <text x="100" y="100" stroke="black">{{level}}</text>  
 </g>
 </template>
 
 <script>
-import cell from '~/components/slot.vue'
+import cell from '~/components/cell.vue'
 import piece from '~/components/piece.vue'
+import nextlevelbutton from '~/components/nextlevelbutton.vue'
+import {mapState} from 'vuex'
 export default{
-    props: ['level','exp','problem'],
+    props: ['exp','problem','nextLevelUp'],
     data(){
 	return {
 	    cleaed:false,
@@ -22,19 +26,18 @@ export default{
     mounted(){//初期化の時だけ
 	this.conf=this.problem
 	//console.log("Mounted")
-	console.log(this.problem)
+	//console.log(this.problem)
+	console.log(this.levels)
     },
     watch:{
-	level(){
+	game(){
 	    this.conf=this.problem
 	}
-    },
-    computed:{//算出プロパティ
     },
     methods:{
 	coords: function(){
 	    let grid=[];
-	    let L=this.level;
+	    let L=this.game.level;
 	    for(let a=-L;a<=L;a++){
 		for(let b=-L;b<=L;b++){
 		    if(a+b>=-L && a+b<=L){
@@ -102,16 +105,21 @@ export default{
 	    //splice(追加・削除する位置,削除する要素数,追加する要素),削除された要素が配列型式で返される			
 	    //console.log(e);
 	    if(this.complete()){
-		console.log("seccess")
+		//console.log("seccess")
 	    }
 	}
     },
     computed:{
+	...mapState({
+	    level:'level',
+	    levels:'levels',
+	    game:'game'
+	}),
 	points(){
 	    let pts=""
 	    for(let i=0;i<6;i++){
-		pts +=" "+(400+Math.cos(Math.PI/6+Math.PI/3*i)*(2*this.level+2)*this.exp)+","+
-		    (400+Math.sin(Math.PI/6+Math.PI/3*i)*(2*this.level+2)*this.exp)//連結
+		pts +=" "+(400+Math.cos(Math.PI/6+Math.PI/3*i)*(2*this.game.level+2)*this.exp)+","+
+		    (500+Math.sin(Math.PI/6+Math.PI/3*i)*(2*this.game.level+2)*this.exp)//連結
 		
 	    }
 	    return pts;
@@ -119,7 +127,8 @@ export default{
     },
     components: {
 	cell,
-	piece
+	piece,
+	nextlevelbutton
   }
 }
 </script>
